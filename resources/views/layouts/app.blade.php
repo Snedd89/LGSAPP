@@ -12,7 +12,34 @@
     <body>
     @include("inc.navbar")
     <div class="container">
-    @yield('content')
+        @include('inc/messages')
+        @yield('content')
     </div>
+    <script> 
+    window.onload = function() {
+                console.log("Window loaded...");
+
+                document.getElementById('input-date').addEventListener('change', function(e){
+                    var dateSelect = this.value;
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var data = JSON.parse(this.responseText);
+                            document.getElementById('input-time').innerHTML = "<option selected value=''>Please pick a time...</option>"
+                            if (data.length == 0) {
+                                document.getElementById('input-time').innerHTML = "<option selected value=''>No slots available</option>"
+                            } else {
+                                for (i=0;i<data.length;i++){
+                                console.log(data[i].time);
+                                document.getElementById('input-time').innerHTML += "<option value='"+data[i]+"'>"+data[i]+":00</option>"
+                            }
+                            }
+                        }
+                    };
+                    xhr.open("GET", "/bookings/check/"+dateSelect, true);
+                    xhr.send(); 
+                    });
+    };
+    </script>
     </body>
 </html>

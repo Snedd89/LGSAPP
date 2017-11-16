@@ -9,24 +9,16 @@
    <div class="row">
     <div class="col-md-6">
         <h3>Book a Gym Slot</h3>
-        <form>
-            <div class="form-group">
-                <label for="email">Step 1: Pick a date</label>
-                <input type="date" class="form-control" name="input-date" id="input-date">
-            </div>
-            <div class="form-group hidden">
-                <label for="time">Step 2: Pick a time</label>
-                 <input list="time" class="form-control">
-                  <datalist id="time">
-                    <option value="Internet Explorer">
-                    <option value="Firefox">
-                    <option value="Chrome">
-                    <option value="Opera">
-                    <option value="Safari">
-                </datalist>
-            </div>
-            <button type="submit" class="btn btn-success">Book</button>
-        </form>
+        {!! Form::open(['action' => 'BookingsController@store', 'method'=> 'POST']) !!}
+        <div class="form-group">
+            {{Form::label('input-date', 'Step 1: Pick a date')}}
+            {{Form::date('input-date', Carbon\Carbon::today()->toDateString(), ['class' => 'form-control'])}}
+        </div>
+        {{Form::label('input-time', 'Step 2: Pick a time')}}
+        {{Form::select('input-time', [], null, ['class' => 'form-control', 'placeholder' => 'Pick a time...'])}}
+        <br />
+        {{Form::submit('Book', ['class' => 'form-control btn btn-success'])}}
+        {!! Form::close() !!}
     </div>
     <div class="col-md-6">
             <h3>Bookings</h3>
