@@ -12,7 +12,7 @@
         {!! Form::open(['action' => 'BookingsController@store', 'method'=> 'POST']) !!}
         <div class="form-group">
             {{Form::label('input-date', 'Step 1: Pick a date')}}
-            {{Form::date('input-date', Carbon\Carbon::today()->toDateString(), ['class' => 'form-control', 'name' => 'setTodaysDate'])}}
+            {{Form::date('input-date', Carbon\Carbon::today()->toDateString(), ['class' => 'form-control'])}}
         </div>
         {{Form::label('input-time', 'Step 2: Pick a time')}}
         {{Form::select('input-time', [], null, ['class' => 'form-control', 'placeholder' => 'Pick a time...'])}}

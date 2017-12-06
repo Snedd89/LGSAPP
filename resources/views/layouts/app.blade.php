@@ -19,7 +19,7 @@
     window.onload = function() {
                 console.log("Window loaded...");
                 var today = new Date().toISOString().split('T')[0];
-                document.getElementsByName("setTodaysDate")[0].setAttribute('min', today);
+                document.getElementsByName("input-date")[0].setAttribute('min', today);
                 var dateSelect = document.getElementById('input-date').value;
 
                 var listTimes = function (e) {
