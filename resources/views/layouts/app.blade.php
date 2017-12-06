@@ -18,9 +18,13 @@
     <script> 
     window.onload = function() {
                 console.log("Window loaded...");
+                var today = new Date().toISOString().split('T')[0];
+                document.getElementsByName("setTodaysDate")[0].setAttribute('min', today);
+                var dateSelect = document.getElementById('input-date').value;
 
-                document.getElementById('input-date').addEventListener('change', function(e){
-                    var dateSelect = this.value;
+                var listTimes = function (e) {
+                    console.log(dateSelect);
+                    dateSelect = document.getElementById('input-date').value;
                     var xhr = new XMLHttpRequest();
                     xhr.onreadystatechange = function() {
                         if (this.readyState == 4 && this.status == 200) {
@@ -30,15 +34,23 @@
                                 document.getElementById('input-time').innerHTML = "<option selected value=''>No slots available</option>"
                             } else {
                                 for (i=0;i<data.length;i++){
-                                console.log(data[i].time);
-                                document.getElementById('input-time').innerHTML += "<option value='"+data[i]+"'>"+data[i]+":00</option>"
+                                console.log(data[i]);
+                                if (data[i] < 10) {
+                                    var prefix = 0;
+                                } else {
+                                    var prefix = "";
+                                }
+                                document.getElementById('input-time').innerHTML += "<option value='"+data[i]+"'>"+prefix+data[i]+":00</option>"
                             }
                             }
                         }
-                    };
+                    }; 
                     xhr.open("GET", "/bookings/check/"+dateSelect, true);
                     xhr.send(); 
-                    });
+                };
+                
+                listTimes();
+                document.getElementById('input-date').addEventListener('click', listTimes);
     };
     </script>
     </body>

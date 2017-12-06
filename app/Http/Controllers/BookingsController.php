@@ -153,6 +153,8 @@ class BookingsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $booking = Booking::find($id);
+        $booking->delete();
+        return redirect('/')->with('success', 'Gym Slot Cancelled');
     }
 }

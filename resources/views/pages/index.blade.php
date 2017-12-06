@@ -12,7 +12,7 @@
         {!! Form::open(['action' => 'BookingsController@store', 'method'=> 'POST']) !!}
         <div class="form-group">
             {{Form::label('input-date', 'Step 1: Pick a date')}}
-            {{Form::date('input-date', Carbon\Carbon::today()->toDateString(), ['class' => 'form-control'])}}
+            {{Form::date('input-date', Carbon\Carbon::today()->toDateString(), ['class' => 'form-control', 'name' => 'setTodaysDate'])}}
         </div>
         {{Form::label('input-time', 'Step 2: Pick a time')}}
         {{Form::select('input-time', [], null, ['class' => 'form-control', 'placeholder' => 'Pick a time...'])}}
@@ -36,7 +36,12 @@
             <tr>
                 <td>{{$booking->date}}</td>
                 <td>{{$booking->time}}:00</td>
-                <td>EDIT CANCEL</td>
+                <td>
+                    {!!Form::open(['action' => ['BookingsController@destroy', $booking->id], 'method' => 'POST'])!!}
+                        {{Form::hidden('_method', 'DELETE')}}
+                        {{Form::submit('Cancel', ['class' => 'btn btn-danger'])}}
+                    {!!Form::close()!!}
+                </td>
             </tr>
         @endforeach
     @else
