@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Booking;
 
+
 class BookingsController extends Controller
 {
     /**
@@ -46,9 +47,10 @@ class BookingsController extends Controller
         $booking = new Booking;
         $booking->date = $request->input('input-date');
         $booking->time = $request->input('input-time');
+        $booking->user_id = auth()->user()->id;
         $booking->save();
 
-        return redirect('/')->with('success', 'Gym Slot Booked!');
+        return redirect('/dashboard')->with('success', 'Gym Slot Booked!');
     }
 
     // Check slots available

@@ -20,3 +20,6 @@ Route::get('/about', 'PagesController@about');
 Route::get('/services', 'PagesController@services');
 Route::get('bookings/check/{dateSelection}', 'BookingsController@check');
 Route::resource("bookings", "BookingsController");
+Auth::routes();
+
+Route::get('/dashboard', 'DashboardController@index');

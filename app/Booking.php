@@ -12,4 +12,9 @@ class Booking extends Model
     public $primaryKey = "id";
     // Timestamps
     public $timestamps = true;
+
+    // Relate booking to the user
+    public function user(){
+        return $this->belongsTo('App\User');
+    }
 }

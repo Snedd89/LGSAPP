@@ -7,7 +7,6 @@
       <tr>
         <th>Date</th>
         <th>Time</th>
-        <th>Control</th>
       </tr>
     </thead>
     <tbody>
@@ -16,12 +15,11 @@
             <tr>
                 <td>{{$booking->date}}</td>
                 <td>{{$booking->time}}:00</td>
-                <td>EDIT CANCEL</td>
             </tr>
         @endforeach
     @else
         <p>No bookings found</p>
     @endif
         </tbody>
-  </table>
+    </table>
 @endsection
