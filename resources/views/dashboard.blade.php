@@ -25,6 +25,7 @@
     </div>
     <div class="col-md-6">
             <h3>Your Booked Slots</h3>
+    @if(count($bookings) > 0)
     <table class="table table-striped">
     <thead>
       <tr>
@@ -34,11 +35,14 @@
       </tr>
     </thead>
     <tbody>
-    @if(count($bookings) > 0)
         @foreach($bookings as $booking)
             <tr>
                 <td>{{$booking->date}}</td>
+                @if ($booking->time < 10)
+                <td>0{{$booking->time}}:00</td>
+                @else
                 <td>{{$booking->time}}:00</td>
+                @endif
                 <td>
                     {!!Form::open(['action' => ['BookingsController@destroy', $booking->id], 'method' => 'POST'])!!}
                         {{Form::hidden('_method', 'DELETE')}}
@@ -48,7 +52,7 @@
             </tr>
         @endforeach
     @else
-        <p>No bookings found</p>
+        <p>You have no gym slots booked.</p>
     @endif
         </tbody>
   </table>

@@ -56,13 +56,11 @@ class BookingsController extends Controller
     // Check slots available
     public function check($dateSelection)
     {
-        //$weekdaySlots = array(7,8,9,10,11,12,13,14,15,16,17,18,19,20);
-        //$weekendSlots = array(10,11,12,13,14,15);
         $slots = DB::table('bookings')
-                ->select(DB::raw('count(*) as booked, time'))
+                ->select('date', 'time', 'user_id')
                 ->where('date', '=', $dateSelection)
-                ->groupBy('time')
                 ->get();
+
          // Check if date is a weekend
          $weekendDay = false;
          $day = date("D", strtotime($dateSelection));
@@ -72,21 +70,26 @@ class BookingsController extends Controller
 
          $availableSlots = array();
          $fullyBooked = array();
+         $prevBooked = array();
+         $booked = count($slots);
          if($weekendDay) {
              // Weekend
              // Iterate through each booked slot
              foreach($slots as $slot) {
                 $time = $slot->time;
-                $booked = $slot->booked;
-                if($booked < 2) {
-                    array_push($availableSlots, $time);
-                } else {
+                $curUserId = auth()->user()->id;
+                $slotUserId = $slot->user_id;
+
+                if($booked >= 2) {
                     array_push($fullyBooked, $time);
+                } else {
+                    array_push($availableSlots, $time);
                 }
+
              }
              // Fill up array with empty slots
              for ($i=10; $i <= 15; $i++) {
-                if((!in_array($i, $availableSlots, true)) && !in_array($i, $fullyBooked, true)){
+                if(!in_array($i, $availableSlots, true) && !in_array($i, $fullyBooked, true)){
                     array_push($availableSlots, $i);
                 }
             }
@@ -95,20 +98,34 @@ class BookingsController extends Controller
              // Iterate through each booked slot
              foreach($slots as $slot) {
                 $time = $slot->time;
-                $booked = $slot->booked;
-                if($booked < 2) {
-                    array_push($availableSlots, $time);
-                } else {
+                $curUserId = auth()->user()->id;
+                $slotUserId = $slot->user_id;
+
+                if($booked >= 2) {
                     array_push($fullyBooked, $time);
+                } else {
+                    array_push($availableSlots, $time);
                 }
              }
              // Fill up array with empty slots
              for ($i=7; $i <= 20; $i++) {
-                if((!in_array($i, $availableSlots, true)) && !in_array($i, $fullyBooked, true)){
+                if(!in_array($i, $availableSlots, true) && !in_array($i, $fullyBooked, true)){
                     array_push($availableSlots, $i);
+                    }
                 }
             }
+
+            foreach($slots as $slot){
+                $time = $slot->time;
+               // $booked = $slot->booked;
+                $curUserId = auth()->user()->id;
+                $slotUserId = $slot->user_id;
+                $bookedDate = $slot->date;
+                if(in_array($time, $availableSlots) && $curUserId == $slotUserId && $dateSelection == $bookedDate){
+                    $availableSlots = array_diff($availableSlots, array($time));
+                }
             }
+
             sort($availableSlots);
             return $availableSlots;
         }
@@ -157,6 +174,6 @@ class BookingsController extends Controller
     {
         $booking = Booking::find($id);
         $booking->delete();
-        return redirect('/')->with('success', 'Gym Slot Cancelled');
+        return redirect('/dashboard')->with('success', 'Gym Slot Cancelled');
     }
 }

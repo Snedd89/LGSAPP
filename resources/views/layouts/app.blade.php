@@ -27,10 +27,12 @@
     <script>
          window.onload = function() {
                 console.log("Window loaded...");
+                // Users cannot choose a date in the past
                 var today = new Date().toISOString().split('T')[0];
                 document.getElementsByName("input-date")[0].setAttribute('min', today);
                 var dateSelect = document.getElementById('input-date').value;
 
+                // Display available time slots in drop down
                 var listTimes = function (e) {
                     console.log(dateSelect);
                     dateSelect = document.getElementById('input-date').value;
